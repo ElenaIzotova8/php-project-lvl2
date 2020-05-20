@@ -2,6 +2,9 @@
     "name": "eleizotova/php-project-lvl2",
     "type": "project",
     "license": "MIT",
+    "scripts": {
+    "phpcs": "phpcs"
+     },
     "authors": [
         {
             "name": "Elena Izotova",
