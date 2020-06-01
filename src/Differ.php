@@ -32,7 +32,7 @@ function genDiff($pathToFile1, $pathToFile2)
     return '{' . $res . PHP_EOL . '}' . PHP_EOL;
 }
 
-function boolToString ($bool)
+function boolToString($bool)
 {
     if (is_bool($bool)) {
         if ($bool === true) {
