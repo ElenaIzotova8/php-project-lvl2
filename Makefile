@@ -6,4 +6,7 @@ lint:
 	
 test:
 	composer test
+
+test-coverage:
+	composer test -- --coverage-clover build/logs/clover.xml
 	
