@@ -3,8 +3,9 @@
     "type": "project",
     "license": "MIT",
     "scripts": {
-    "phpcs": "phpcs"
-     },
+    "phpcs": "phpcs",
+    "test": "phpunit tests/"
+    },
     "authors": [
         {
             "name": "Elena Izotova",
@@ -13,11 +14,11 @@
     ],
     "bin": ["bin/gendiff"],
     "autoload": {
-        "psr-4": {
-            "Php\\Package\\": "src",
-            "Php\\Package\\Tests\\": "tests"
-          }
-     },
+        "files": [
+            "src/Differ.php",
+            "tests/DifferTest.php"
+        ]
+    },
     "require": {
         "docopt/docopt": "^1.0"
     },
