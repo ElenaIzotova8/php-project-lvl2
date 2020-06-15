@@ -2,7 +2,7 @@ install:
 	composer install
         
 lint:
-	composer exec phpcs -- --standard=PSR12 src tests
+	composer run-script phpcs -- --standard=PSR12 src bin
 	
 test:
 	composer test
