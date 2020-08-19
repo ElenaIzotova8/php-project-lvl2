@@ -2,11 +2,7 @@
 
 namespace  Differ\Differ\Tests;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\Yaml\Yaml;
 use function Differ\Differ\genDiff;
-
-require_once('./src/Differ.php');
-require_once('./src/Parsers.php');
 
 class DifferTest extends TestCase
 {
