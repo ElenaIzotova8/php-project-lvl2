@@ -14,6 +14,6 @@ function parse($pathToFile)
     ];
     $name = explode('.', basename($pathToFile));
     $type = end($name);
-    $data = file_get_contents($pathToFile); 
+    $data = file_get_contents($pathToFile);
     return $mapping[$type]($data);
 }
