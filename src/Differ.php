@@ -9,6 +9,7 @@ function genDiff($pathToFile1, $pathToFile2)
     $arr1 = parse($pathToFile1);
     $arr2 = parse($pathToFile2);
     $arr = array_merge($arr1, $arr2);
+    ksort($arr);
     $arrRes = [];
     foreach ($arr as $key => $value) {
         if (!array_key_exists($key, $arr1)) {
