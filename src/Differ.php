@@ -19,7 +19,7 @@ function genDiff($pathToFile1, $pathToFile2)
                 $arrRes["- {$key}"] = $value;
             } else {
                 if ($arr1[$key] === $arr2[$key]) {
-                    $arrRes[$key] = $value;
+                    $arrRes["  $key"] = $value;
                 } else {
                     $arrRes["- {$key}"] = $arr1[$key];
                     $arrRes["+ {$key}"] = $arr2[$key];
