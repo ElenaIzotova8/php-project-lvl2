@@ -8,4 +8,4 @@ test:
 	composer test
 
 test-coverage:
-	composer exec --verbose phpunit tests -- --coverage-clover build/logs/clover.xml --migrate-configuration	
+	composer phpunit tests -- --coverage-clover build/logs/clover.xml --migrate-configuration	
