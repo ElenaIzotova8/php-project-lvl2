@@ -8,5 +8,5 @@ test:
 	composer test
 
 test-coverage:
-	composer test -- --coverage-clover build/logs/clover.xml
+	composer exec --verbose phpunit tests -- --coverage-clover build/logs/clover.xml
 	
