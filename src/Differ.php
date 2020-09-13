@@ -3,45 +3,18 @@
 namespace  Differ\Differ;
 
 use function Differ\Parsers\parse;
+use function Differ\Tree\diffAsTree;
+use function Differ\Formatters\Stylish\stylish;
 
 function genDiff($pathToFile1, $pathToFile2)
 {
-    $arr1 = parse($pathToFile1);
-    $arr2 = parse($pathToFile2);
-    $arr = array_merge($arr1, $arr2);
-    ksort($arr);
-    $arrRes = [];
-    foreach ($arr as $key => $value) {
-        if (!array_key_exists($key, $arr1)) {
-            $arrRes["+ {$key}"] = $value;
-        } else {
-            if (!array_key_exists($key, $arr2)) {
-                $arrRes["- {$key}"] = $value;
-            } else {
-                if ($arr1[$key] === $arr2[$key]) {
-                    $arrRes["  $key"] = $value;
-                } else {
-                    $arrRes["- {$key}"] = $arr1[$key];
-                    $arrRes["+ {$key}"] = $arr2[$key];
-                }
-            }
-        }
+    $data1 = parse($pathToFile1);
+    $data2 = parse($pathToFile2);
+    if (is_object($data1)) {
+        $arr1 = (array) $data1;
     }
-    $res = '';
-    foreach ($arrRes as $key => $value) {
-        $value = boolToString($value);
-        $res = $res . PHP_EOL . "    {$key}: {$value}";
+    if (is_object($data2)) {
+        $arr2 = (array) $data2;
     }
-    return '{' . $res . PHP_EOL . '}' . PHP_EOL;
-}
-
-function boolToString($bool)
-{
-    if (is_bool($bool)) {
-        if ($bool === true) {
-            return 'true';
-        }
-        return 'false';
-    }
-    return $bool;
+    return stylish(diffAsTree($arr1, $arr2));
 }
