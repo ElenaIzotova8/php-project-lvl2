@@ -42,12 +42,12 @@ function diffAsTree($arr1, $arr2)
             $tree[] = makeNode($key, 'added', null, boolToString($value));
         } else {
             if (!array_key_exists($key, $arr2)) {
-                $tree[] = makeNode($key, 'deleted', boolToString($value), null);
+                $tree[] = makeNode($key, 'removed', boolToString($value), null);
             } else {
                 if ($arr1[$key] === $arr2[$key]) {
                     $tree[] = makeNode($key, 'notChanged', boolToString($value), boolToString($value));
                 } else {
-                    $tree[] = makeNode($key, 'changed', boolToString($arr1[$key]), boolToString($arr2[$key]));
+                    $tree[] = makeNode($key, 'updated', boolToString($arr1[$key]), boolToString($arr2[$key]));
                 }
             }
         }

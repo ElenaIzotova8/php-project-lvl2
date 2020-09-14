@@ -7,9 +7,9 @@ function stylish($tree)
     $mapping = [
         'added' =>
             fn($node) => PHP_EOL . "  + {$node['name']}: {$node['newValue']}",
-        'deleted' =>
+        'removed' =>
             fn($node) => PHP_EOL . "  - {$node['name']}: {$node['oldValue']}",
-        'changed' =>
+        'updated' =>
             fn($node) => PHP_EOL . "  - {$node['name']}: {$node['oldValue']}" .
             PHP_EOL . "  + {$node['name']}: {$node['newValue']}",
         'notChanged' =>
