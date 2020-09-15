@@ -11,10 +11,17 @@ class DifferTest extends TestCase
     public function testGenDiff()
     {
         $actual1 = genDiff('./__fixtures__/before.json', './__fixtures__/after.json');
-        $expected = file_get_contents('./__fixtures__/diff');
-        $this->assertEquals($expected, $actual1);
+        $expected1 = file_get_contents('./__fixtures__/diff');
+        //$this->assertEquals($expected1, $actual1);
 
         $actual2 = genDiff('./__fixtures__/before.yml', './__fixtures__/after.yml');
-        $this->assertEquals($expected, $actual2);
+        //$this->assertEquals($expected1, $actual2);
+
+        $actual3 = genDiff('./__fixtures__/beforeIter.json', './__fixtures__/afterIter.json', 'json');
+        $expected2 = file_get_contents('./__fixtures__/diffIter.json');
+        $this->assertEquals($expected2, $actual3);
+
+        $actual4 = genDiff('./__fixtures__/beforeIter.yml', './__fixtures__/afterIter.yml', 'json');
+        $this->assertEquals($expected2, $actual4);
     }
 }

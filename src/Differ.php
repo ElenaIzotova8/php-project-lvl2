@@ -12,13 +12,7 @@ function genDiff($pathToFile1, $pathToFile2, $format = 'stylish')
 {
     $data1 = parse($pathToFile1);
     $data2 = parse($pathToFile2);
-    if (is_object($data1)) {
-        $arr1 = (array) $data1;
-    }
-    if (is_object($data2)) {
-        $arr2 = (array) $data2;
-    }
-
+    
     $mapping = [
         'stylish' =>
             fn($tree) => stylish($tree),
@@ -27,6 +21,5 @@ function genDiff($pathToFile1, $pathToFile2, $format = 'stylish')
         'json' =>
             fn($tree) => json($tree),
     ];
-
-    return $mapping[$format](diffAsTree($arr1, $arr2));
+    return $mapping[$format](diffAsTree($data1, $data2));
 }

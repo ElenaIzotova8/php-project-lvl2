@@ -12,6 +12,17 @@ function makeNode(string $name, string $type, $oldValue, $newValue)
     ];
 }
 
+function makeNested(string $name, string $type, $oldValue, $newValue, $children)
+{
+    return [
+        "name" => $name,
+        "type" => $type,
+        "oldValue" => $oldValue,
+        "newValue" => $newValue,
+        "children" => $children
+    ];
+}
+
 function getName($node)
 {
     return $node['name'];
@@ -32,36 +43,47 @@ function getNewValue($node)
     return $node['newValue'];
 }
 
-function diffAsTree($arr1, $arr2)
+function getChildren($node)
 {
-    $arr = array_merge($arr1, $arr2);
+    return $node['children'];
+}
+
+function isNested($node)
+{
+    return getType($node) === 'nested';
+}
+
+function diffAsTree($data1, $data2)
+{
+    if (is_object($data1)) {
+        $data1 = (array) $data1;
+    }
+    if (is_object($data2)) {
+        $data2 = (array) $data2;
+    }
+
+    $arr = array_merge($data1, $data2);
     ksort($arr);
     $tree = [];
     foreach ($arr as $key => $value) {
-        if (!array_key_exists($key, $arr1)) {
-            $tree[] = makeNode($key, 'added', null, boolToString($value));
+        if (!array_key_exists($key, $data1)) {
+            $tree[] = makeNode($key, 'added', null, $value);
         } else {
-            if (!array_key_exists($key, $arr2)) {
-                $tree[] = makeNode($key, 'removed', boolToString($value), null);
+            if (!array_key_exists($key, $data2)) {
+                $tree[] = makeNode($key, 'removed', $value, null);
             } else {
-                if ($arr1[$key] === $arr2[$key]) {
-                    $tree[] = makeNode($key, 'notChanged', boolToString($value), boolToString($value));
+                if (is_object($data1[$key]) && (is_object($data2[$key]))) {
+                    $tree[] =
+                    makeNested($key, 'nested', $data1[$key], $data2[$key], diffAsTree($data1[$key], $data2[$key]));
                 } else {
-                    $tree[] = makeNode($key, 'updated', boolToString($arr1[$key]), boolToString($arr2[$key]));
+                    if ($data1[$key] !== $data2[$key]) {
+                        $tree[] = makeNode($key, 'updated', $data1[$key], $data2[$key]);
+                    } else {
+                        $tree[] = makeNode($key, 'notChanged', $value, $value);
+                    }
                 }
             }
         }
     }
     return $tree;
-}
-
-function boolToString($bool)
-{
-    if (is_bool($bool)) {
-        if ($bool === true) {
-            return 'true';
-        }
-        return 'false';
-    }
-    return $bool;
 }
