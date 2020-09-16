@@ -30,13 +30,13 @@ function stylish($tree)
     return '{' . $res . PHP_EOL . '}' . PHP_EOL;
 }
 
-function boolToString($bool)
+function boolToString($value)
 {
-    if (is_bool($bool)) {
-        if ($bool === true) {
+    if (is_bool($value)) {
+        if ($value === true) {
             return 'true';
         }
         return 'false';
     }
-    return $bool;
+    return $value;
 }

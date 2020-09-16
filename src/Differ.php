@@ -12,7 +12,7 @@ function genDiff($pathToFile1, $pathToFile2, $format = 'stylish')
 {
     $data1 = parse($pathToFile1);
     $data2 = parse($pathToFile2);
-    
+        
     $mapping = [
         'stylish' =>
             fn($tree) => stylish($tree),

@@ -2,17 +2,7 @@
 
 namespace  Differ\Tree;
 
-function makeNode(string $name, string $type, $oldValue, $newValue)
-{
-    return [
-        "name" => $name,
-        "type" => $type,
-        "oldValue" => $oldValue,
-        "newValue" => $newValue
-    ];
-}
-
-function makeNested(string $name, string $type, $oldValue, $newValue, $children)
+function makeNode(string $name, string $type, $oldValue, $newValue, $children = [])
 {
     return [
         "name" => $name,
@@ -74,7 +64,7 @@ function diffAsTree($data1, $data2)
             } else {
                 if (is_object($data1[$key]) && (is_object($data2[$key]))) {
                     $tree[] =
-                    makeNested($key, 'nested', $data1[$key], $data2[$key], diffAsTree($data1[$key], $data2[$key]));
+                    makeNode($key, 'nested', $data1[$key], $data2[$key], diffAsTree($data1[$key], $data2[$key]));
                 } else {
                     if ($data1[$key] !== $data2[$key]) {
                         $tree[] = makeNode($key, 'updated', $data1[$key], $data2[$key]);
