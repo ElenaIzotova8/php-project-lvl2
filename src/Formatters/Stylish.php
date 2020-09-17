@@ -43,9 +43,8 @@ function prepareValue($value, $space = '')
         return boolToString($value);
     }
     $arr = (array) ($value);
-    $res = '';
-    foreach ($arr as $key => $value) {
-        $res = $res . PHP_EOL . $space . "    {$key}: " . prepareValue($value, $space . '    ');
-    }
+    $res = implode('', array_map(function ($key, $value) use ($space) {
+        return PHP_EOL . $space . "    {$key}: " . prepareValue($value, $space . '    ');
+    }, array_keys($arr), $arr));
     return '{' . $res . PHP_EOL . $space . '}';
 }
