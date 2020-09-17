@@ -15,8 +15,7 @@ function json($tree)
 
 function diffAsArray($tree)
 {
-    $res = [];
-    foreach ($tree as $node) {
+    return array_reduce($tree, function ($res, $node) {
         $type = getType($node);
         $name = getName($node);
         $oldValue = getOldValue($node);
@@ -39,6 +38,6 @@ function diffAsArray($tree)
             case 'nested':
                 $res["  {$name}"] = diffAsArray($children);
         }
-    }
-    return $res;
+        return $res;
+    }, []);
 }
