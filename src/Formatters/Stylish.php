@@ -28,7 +28,7 @@ function iter($tree, $space)
                 PHP_EOL . $space . '    }',
         ];
         return $res . $mapping[$type];
-    }, '');    
+    }, '');
 }
 
 function stylish($tree)
