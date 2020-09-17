@@ -22,7 +22,6 @@ function diffAsArray($tree)
         $oldValue = getOldValue($node);
         $newValue = getNewValue($node);
         $children = getChildren($node);
-        
         switch ($type) {
             case 'added':
                 $res["+ {$name}"] = $newValue;
@@ -40,21 +39,6 @@ function diffAsArray($tree)
             case 'nested':
                 $res["  {$name}"] = diffAsArray($children);
         }
-    //    $mapping = [
-     //       'added' =>
-    //            [$res["+ {$name}"] => $newValue],
-     //       'removed' =>
-    //            [$res["- {$name}"] => $oldValue],
-    //        'notChanged' =>
-    //            [$res["  {$name}"] => $oldValue],
-     //       'updated' => [
-    //            $res["- {$name}"] => $oldValue,
-    //            $res["+ {$name}"] => $newValue,
-    //        ],
-     //       'nested' =>
-     //           [$res["  {$name}"] => diffAsArray(getChildren($node))],
-    //    ];
-    //    [$res[$key] => $value] = $mapping[$type];
     }
     return $res;
 }

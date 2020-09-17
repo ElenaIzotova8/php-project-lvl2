@@ -11,15 +11,13 @@ use function Differ\Formatters\Preparation\boolToString;
 
 function iter($tree, $space)
 {
-    $res = '';
     $addedSpace = '    ';
-    foreach ($tree as $node) {
+    return array_reduce($tree, function ($res, $node) use ($space, $addedSpace) {
         $type = getType($node);
         $name = getName($node);
         $oldValue = getOldValue($node);
         $newValue = getNewValue($node);
         $children = getChildren($node);
-
         $mapping = [
             'added' => PHP_EOL . $space . "  + {$name}: " . prepareValue($newValue, $space . $addedSpace),
             'removed' => PHP_EOL . $space . "  - {$name}: " . prepareValue($oldValue, $space . $addedSpace),
@@ -29,9 +27,8 @@ function iter($tree, $space)
             'nested' => PHP_EOL . $space . "    {$name}: {" . iter($children, $space . $addedSpace) .
                 PHP_EOL . $space . '    }',
         ];
-        $res = $res . $mapping[$type];
-    }
-    return $res;
+        return $res . $mapping[$type];
+    }, '');    
 }
 
 function stylish($tree)

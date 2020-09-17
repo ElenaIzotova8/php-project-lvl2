@@ -38,20 +38,10 @@ function getChildren($node)
     return $node['children'];
 }
 
-function isNested($node)
-{
-    return getType($node) === 'nested';
-}
-
 function diffAsTree($data1, $data2)
 {
-    if (is_object($data1)) {
-        $data1 = (array) $data1;
-    }
-    if (is_object($data2)) {
-        $data2 = (array) $data2;
-    }
-
+    $data1 = is_object($data1) ? (array) $data1 : $data1;
+    $data2 = is_object($data2) ? (array) $data2 : $data2;
     $arr = array_merge($data1, $data2);
     ksort($arr);
     $tree = [];

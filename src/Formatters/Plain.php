@@ -11,14 +11,12 @@ use function Differ\Formatters\Preparation\boolToString;
 
 function iter($tree, $preName)
 {
-    $res = '';
-    foreach ($tree as $node) {
+    return array_reduce($tree, function ($res, $node) use ($preName) {
         $type = getType($node);
         $name = $preName . getName($node);
         $oldValue = prepareValue(getOldValue($node));
         $newValue = prepareValue(getNewValue($node));
         $children = getChildren($node);
-
         $mapping = [
             'added' => "Property '{$name}' was {$type} with value: {$newValue}" . PHP_EOL,
             'removed' => "Property '{$name}' was {$type}" . PHP_EOL,
@@ -26,9 +24,8 @@ function iter($tree, $preName)
             'updated' => "Property '{$name}' was {$type}. From {$oldValue} to {$newValue}" . PHP_EOL,
             'nested' => iter($children, $name . '.'),
         ];
-        $res = $res . $mapping[$type];
-    }
-    return $res;
+        return $res . $mapping[$type];
+    }, '');
 }
 
 function plain($tree)
