@@ -9,17 +9,21 @@
 Загрузка проекта - composer global require eleizotova/php-project-lvl2.
 
 Пример работы пакета - сравнение 2 плоских файлов формата json:
+
 gendiff before.json after.json
 
 [![asciicast](https://asciinema.org/a/360299.svg)](https://asciinema.org/a/360299)
 
 Пример работы пакета - сравнение 2 плоских файлов формата yaml:
+
 gendiff before.yml after.yml
 
 [![asciicast](https://asciinema.org/a/360301.svg)](https://asciinema.org/a/360301)
 
 Пример работы пакета для файлов, имеющих вложенные структуры:
+
 gendiff beforeIter.json afterIter.json
+
 gendiff beforeIter.yml afterIter.yml
 
 [![asciicast](https://asciinema.org/a/360302.svg)](https://asciinema.org/a/360302)
