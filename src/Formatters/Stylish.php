@@ -7,36 +7,48 @@ use function Differ\Tree\getName;
 use function Differ\Tree\getOldValue;
 use function Differ\Tree\getNewValue;
 use function Differ\Tree\getChildren;
-use function Differ\Tree\isNested;
+use function Differ\Formatters\Preparation\boolToString;
+
+function iter($tree, $space)
+{
+    $res = '';
+    $addedSpace = '    ';
+    foreach ($tree as $node) {
+        $type = getType($node);
+        $name = getName($node);
+        $oldValue = getOldValue($node);
+        $newValue = getNewValue($node);
+        $children = getChildren($node);
+
+        $mapping = [
+            'added' => PHP_EOL . $space . "  + {$name}: " . prepareValue($newValue, $space . $addedSpace),
+            'removed' => PHP_EOL . $space . "  - {$name}: " . prepareValue($oldValue, $space . $addedSpace),
+            'notChanged' => PHP_EOL . $space . "    {$name}: " . prepareValue($newValue, $space . $addedSpace),
+            'updated' => PHP_EOL . $space . "  - {$name}: " . prepareValue($oldValue, $space . $addedSpace) .
+                PHP_EOL . $space . "  + {$name}: " . prepareValue($newValue, $space . $addedSpace),
+            'nested' => PHP_EOL . $space . "    {$name}: {" . iter($children, $space . $addedSpace) .
+                PHP_EOL . $space . '    }',
+        ];
+        $res = $res . $mapping[$type];
+    }
+    return $res;
+}
 
 function stylish($tree)
 {
-    $mapping = [
-        'added' =>
-            fn($node) => PHP_EOL . "  + {$node['name']}: {$node['newValue']}",
-        'removed' =>
-            fn($node) => PHP_EOL . "  - {$node['name']}: {$node['oldValue']}",
-        'updated' =>
-            fn($node) => PHP_EOL . "  - {$node['name']}: {$node['oldValue']}" .
-            PHP_EOL . "  + {$node['name']}: {$node['newValue']}",
-        'notChanged' =>
-            fn($node) => PHP_EOL . "    {$node['name']}: {$node['newValue']}",
-    ];
-
-    $res = '';
-    foreach ($tree as $node) {
-        $res = $res . $mapping[getType($node)]($node);
-    }
+    $res = iter($tree, '');
     return '{' . $res . PHP_EOL . '}' . PHP_EOL;
 }
 
-function boolToString($value)
+function prepareValue($value, $space = '')
 {
-    if (is_bool($value)) {
-        if ($value === true) {
-            return 'true';
-        }
-        return 'false';
+    if (!is_object($value)) {
+        return boolToString($value);
     }
-    return $value;
+    $arr = (array) ($value);
+    $res = '';
+    foreach ($arr as $key => $value) {
+        $res = $res . PHP_EOL . $space . "    {$key}: " . prepareValue($value, $space . '    ');
+    }
+    return '{' . $res . PHP_EOL . $space . '}';
 }

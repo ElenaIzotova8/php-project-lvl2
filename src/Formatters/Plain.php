@@ -7,6 +7,7 @@ use function Differ\Tree\getName;
 use function Differ\Tree\getOldValue;
 use function Differ\Tree\getNewValue;
 use function Differ\Tree\getChildren;
+use function Differ\Formatters\Preparation\boolToString;
 
 function iter($tree, $preName)
 {
@@ -37,13 +38,7 @@ function plain($tree)
 
 function prepareValue($value)
 {
-    $preparedValue = is_string($value) ? "'{$value}'" : $value;
+    $preparedValue = is_string($value) ? "'{$value}'" : boolToString($value);
     $preparedValue = is_object($preparedValue) ? '[complex value]' : $preparedValue;
-    if (is_bool($preparedValue)) {
-        if ($preparedValue === true) {
-            return 'true';
-        }
-        return 'false';
-    }
     return $preparedValue;
 }
