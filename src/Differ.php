@@ -10,8 +10,8 @@ use function Differ\Formatters\Json\json;
 
 function genDiff($pathToFile1, $pathToFile2, $format = 'stylish')
 {
-    $data1 = parse($pathToFile1);
-    $data2 = parse($pathToFile2);
+    $data1 = getData($pathToFile1);
+    $data2 = getData($pathToFile2);
         
     $mapping = [
         'stylish' =>
@@ -22,4 +22,11 @@ function genDiff($pathToFile1, $pathToFile2, $format = 'stylish')
             fn($tree) => json($tree),
     ];
     return $mapping[$format](diffAsTree($data1, $data2));
+}
+
+function getData($pathToFile)
+{
+    $type = pathinfo($pathToFile, PATHINFO_EXTENSION);
+    $rawData = file_get_contents($pathToFile);
+    return parse($rawData, $type);
 }

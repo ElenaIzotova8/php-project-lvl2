@@ -42,25 +42,21 @@ function diffAsTree($data1, $data2)
 {
     $data1 = is_object($data1) ? (array) $data1 : $data1;
     $data2 = is_object($data2) ? (array) $data2 : $data2;
-    $arr = array_keys(array_merge($data1, $data2));
-    sort($arr);
+    $keys = array_keys(array_merge($data1, $data2));
+    sort($keys);
     return array_map(function ($key) use ($data1, $data2) {
         if (!array_key_exists($key, $data1)) {
             return makeNode($key, 'added', null, $data2[$key]);
-        } else {
-            if (!array_key_exists($key, $data2)) {
-                return makeNode($key, 'removed', $data1[$key], null);
-            } else {
-                if (is_object($data1[$key]) && (is_object($data2[$key]))) {
-                    return makeNode($key, 'nested', $data1[$key], $data2[$key], diffAsTree($data1[$key], $data2[$key]));
-                } else {
-                    if ($data1[$key] !== $data2[$key]) {
-                        return makeNode($key, 'updated', $data1[$key], $data2[$key]);
-                    } else {
-                        return makeNode($key, 'notChanged', $data1[$key], $data2[$key]);
-                    }
-                }
-            }
-        }
-    }, $arr);
+        };
+        if (!array_key_exists($key, $data2)) {
+            return makeNode($key, 'removed', $data1[$key], null);
+        };
+        if (is_object($data1[$key]) && (is_object($data2[$key]))) {
+            return makeNode($key, 'nested', $data1[$key], $data2[$key], diffAsTree($data1[$key], $data2[$key]));
+        };
+        if ($data1[$key] !== $data2[$key]) {
+            return makeNode($key, 'updated', $data1[$key], $data2[$key]);
+        };
+        return makeNode($key, 'notChanged', $data1[$key], $data2[$key]);
+    }, $keys);
 }

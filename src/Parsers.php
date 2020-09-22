@@ -4,7 +4,7 @@ namespace  Differ\Parsers;
 
 use Symfony\Component\Yaml\Yaml;
 
-function parse($pathToFile)
+function parse($rawData, $type)
 {
     $mapping = [
         'yml' =>
@@ -12,8 +12,5 @@ function parse($pathToFile)
         'json' =>
             fn($rawData) => json_decode($rawData),
     ];
-    $name = explode('.', basename($pathToFile));
-    $type = end($name);
-    $data = file_get_contents($pathToFile);
-    return $mapping[$type]($data);
+    return $mapping[$type]($rawData);
 }

@@ -5,37 +5,39 @@ namespace  Differ\Differ\Tests;
 use PHPUnit\Framework\TestCase;
 
 use function Differ\Differ\genDiff;
+use function Funct\Collection\flatten;
 
 class DifferTest extends TestCase
 {
-    public function testGenDiff()
+    public function addDataProvider()
     {
-        $actual1 = genDiff('./__fixtures__/before.json', './__fixtures__/after.json');
-        $expected1 = file_get_contents('./__fixtures__/diff');
-        $this->assertEquals($expected1, $actual1);
+        $inputs1 = ['beforeIter.json', 'beforeIter.yml'];
+        $inputs2 = ['afterIter.json', 'afterIter.yml'];
+        $formats = ['stylish', 'plain', 'json'];
+        $results = ['diffIter', 'diffIterPlain', 'diffIter.json'];
+        return flatten(
+            array_map(function ($input1, $input2) use ($formats, $results) {
+                return array_map(function ($format, $result) use ($input1, $input2) {
+                    return [$this->genPath($input1), $this->genPath($input2), $format, $this->genPath($result)];
+                }, $formats, $results);
+            }, $inputs1, $inputs2)
+        );
+    }
 
-        $actual2 = genDiff('./__fixtures__/before.yml', './__fixtures__/after.yml');
-        $this->assertEquals($expected1, $actual2);
+    /**
+     * @dataProvider addDataProvider
+     */
+    
+    public function testGenDiff($pathToFile1, $pathToFile2, $format, $pathToExpected)
+    {
+        $actual = genDiff($pathToFile1, $pathToFile2, $format);
+        $expected = file_get_contents($pathToExpected);
+        $this->assertEquals($expected, $actual);
+    }
 
-        $actual3 = genDiff('./__fixtures__/beforeIter.json', './__fixtures__/afterIter.json');
-        $expected2 = file_get_contents('./__fixtures__/diffIter');
-        $this->assertEquals($expected2, $actual3);
-
-        $actual4 = genDiff('./__fixtures__/beforeIter.yml', './__fixtures__/afterIter.yml');
-        $this->assertEquals($expected2, $actual4);
-
-        $actual5 = genDiff('./__fixtures__/beforeIter.json', './__fixtures__/afterIter.json', 'plain');
-        $expected3 = file_get_contents('./__fixtures__/diffIterPlain');
-        $this->assertEquals($expected3, $actual5);
-
-        $actual6 = genDiff('./__fixtures__/beforeIter.yml', './__fixtures__/afterIter.yml', 'plain');
-        $this->assertEquals($expected3, $actual6);
-
-        $actual7 = genDiff('./__fixtures__/beforeIter.json', './__fixtures__/afterIter.json', 'json');
-        $expected4 = file_get_contents('./__fixtures__/diffIter.json');
-        $this->assertEquals($expected4, $actual7);
-
-        $actual8 = genDiff('./__fixtures__/beforeIter.yml', './__fixtures__/afterIter.yml', 'json');
-        $this->assertEquals($expected4, $actual8);
+    private function genPath($baseName)
+    {
+        $dir = '__fixtures__';
+        return "./{$dir}/{$baseName}";
     }
 }
