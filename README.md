@@ -42,7 +42,7 @@ gendiff --format json beforeIter.json afterIter.json
 
 gendiff --format json beforeIter.yml afterIter.yml
 
-[![asciicast](https://asciinema.org/a/360305.svg)](https://asciinema.org/a/360305)
+[![asciicast](https://asciinema.org/a/362333.svg)](https://asciinema.org/a/362333)
 
 <a href="https://codeclimate.com/github/ElenaIzotova8/php-project-lvl2/maintainability"><img src="https://api.codeclimate.com/v1/badges/41613d85cfce08259c64/maintainability" /></a>
 <a href="https://codeclimate.com/github/ElenaIzotova8/php-project-lvl2/test_coverage"><img src="https://api.codeclimate.com/v1/badges/41613d85cfce08259c64/test_coverage" /></a>
