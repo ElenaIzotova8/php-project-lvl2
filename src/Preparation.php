@@ -1,6 +1,6 @@
 <?php
 
-namespace  Differ\Formatters\Preparation;
+namespace  Differ\Preparation;
 
 function boolToString($value)
 {

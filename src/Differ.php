@@ -3,7 +3,7 @@
 namespace  Differ\Differ;
 
 use function Differ\Parsers\parse;
-use function Differ\Tree\diffAsTree;
+use function Differ\Builder\diffAsTree;
 use function Differ\Formatters\Stylish\stylish;
 use function Differ\Formatters\Plain\plain;
 use function Differ\Formatters\Json\json;

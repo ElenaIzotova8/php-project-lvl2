@@ -7,30 +7,41 @@ use function Differ\Tree\getName;
 use function Differ\Tree\getOldValue;
 use function Differ\Tree\getNewValue;
 use function Differ\Tree\getChildren;
-use function Differ\Formatters\Preparation\boolToString;
+use function Differ\Preparation\boolToString;
+use function Funct\Collection\flattenAll;
 
 function iter($tree, $preName)
 {
-    return array_reduce($tree, function ($res, $node) use ($preName) {
+    $result = array_reduce($tree, function ($res, $node) use ($preName) {
         $type = getType($node);
         $name = $preName . getName($node);
-        $oldValue = prepareValue(getOldValue($node));
-        $newValue = prepareValue(getNewValue($node));
-        $children = getChildren($node);
-        $mapping = [
-            'added' => "Property '{$name}' was {$type} with value: {$newValue}" . PHP_EOL,
-            'removed' => "Property '{$name}' was {$type}" . PHP_EOL,
-            'notChanged' => '',
-            'updated' => "Property '{$name}' was {$type}. From {$oldValue} to {$newValue}" . PHP_EOL,
-            'nested' => iter($children, $name . '.'),
-        ];
-        return $res . $mapping[$type];
-    }, '');
+        switch ($type) {
+            case 'added':
+                $newValue = prepareValue(getNewValue($node));
+                $res[] = "Property '{$name}' was {$type} with value: {$newValue}";
+                break;
+            case 'removed':
+                $res[] = "Property '{$name}' was {$type}";
+                break;
+            case 'notChanged':
+                break;
+            case 'updated':
+                $oldValue = prepareValue(getOldValue($node));
+                $newValue = prepareValue(getNewValue($node));
+                $res[] = "Property '{$name}' was {$type}. From {$oldValue} to {$newValue}";
+                break;
+            case 'nested':
+                $children = getChildren($node);
+                $res[] = iter($children, $name . '.');
+        };
+        return $res;
+    }, []);
+    return flattenAll($result);
 }
 
 function plain($tree)
 {
-    return iter($tree, '');
+    return implode("\n", iter($tree, ''));
 }
 
 function prepareValue($value)
